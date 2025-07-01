@@ -1,0 +1,62 @@
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+
+public class ToDoApp {
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> new ToDoApp().createAndShowGUI());
+    }
+
+    private void createAndShowGUI() {
+        // Frame
+        JFrame frame = new JFrame("To-Do List App");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(400, 500);
+        frame.setLayout(new BorderLayout());
+
+        // Components
+        DefaultListModel<String> taskListModel = new DefaultListModel<>();
+        JList<String> taskList = new JList<>(taskListModel);
+        JScrollPane scrollPane = new JScrollPane(taskList);
+
+        JTextField taskField = new JTextField();
+        JButton addButton = new JButton("Add Task");
+        JButton removeButton = new JButton("Remove Task");
+
+        // Panel for buttons
+        JPanel inputPanel = new JPanel();
+        inputPanel.setLayout(new BorderLayout());
+        inputPanel.add(taskField, BorderLayout.CENTER);
+        inputPanel.add(addButton, BorderLayout.EAST);
+
+        JPanel bottomPanel = new JPanel();
+        bottomPanel.setLayout(new FlowLayout());
+        bottomPanel.add(removeButton);
+
+        // Add components to frame
+        frame.add(inputPanel, BorderLayout.NORTH);
+        frame.add(scrollPane, BorderLayout.CENTER);
+        frame.add(bottomPanel, BorderLayout.SOUTH);
+
+        // Add Button Action
+        addButton.addActionListener(e -> {
+            String task = taskField.getText().trim();
+            if (!task.isEmpty()) {
+                taskListModel.addElement(task);
+                taskField.setText("");
+            }
+        });
+
+        // Remove Button Action
+        removeButton.addActionListener(e -> {
+            int selected = taskList.getSelectedIndex();
+            if (selected != -1) {
+                taskListModel.remove(selected);
+            }
+        });
+
+        // Show GUI
+        frame.setVisible(true);
+    }
+}
